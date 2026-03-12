@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- KEY FIX: maximum-scale=1 prevents iOS Safari zoom on input focus -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <!-- favicon & logo -->
   <link rel="icon" href="https://www.purelifehealth.io/favicon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -126,7 +127,7 @@
 
     /* consistent spacing between form elements */
     .form-group {
-      margin-bottom: 1.25rem; /* uniform spacing between each input block */
+      margin-bottom: 1.25rem;
     }
 
     /* symptom add button */
@@ -136,12 +137,13 @@
       color: #d0404c;
       border-radius: 9999px;
       padding: 0.5rem 1rem;
-      font-size: 0.75rem;
       font-weight: 500;
       cursor: pointer;
       transition: all 0.2s;
       width: fit-content;
       white-space: nowrap;
+      /* Keep button text small without triggering zoom */
+      font-size: 0.75rem;
     }
     .add-symptom-btn:hover {
       background-color: #ffe5e7;
@@ -172,13 +174,11 @@
       align-items: center;
       margin-top: 0.5rem;
     }
-    
-    /* 70% width for symptom input */
     .symptom-input-wrapper input {
       width: 70%;
     }
     
-    /* big textarea with increased top padding */
+    /* big textarea */
     textarea#description {
       min-height: 120px;
       resize: vertical;
@@ -194,49 +194,94 @@
       margin-left: 0.25rem;
     }
 
-    /* fix grid spacing - ensure columns have proper gap */
+    /* grid gap */
     .grid-cols-2 {
       gap: 1rem;
     }
 
-    /* Responsive grid for mobile */
+    /* =====================================================
+       iOS / MOBILE ZOOM FIX
+       All inputs, selects, textareas MUST be 16px minimum
+       to prevent iOS Safari from zooming on focus.
+       We use font-size: 16px directly — no transforms.
+       ===================================================== */
+    input,
+    select,
+    textarea {
+      font-size: 16px !important;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      font-size: 16px !important;
+    }
+
+    /* Labels and non-input UI text stay small */
+    label,
+    .text-xs,
+    .text-sm,
+    .step-label,
+    .optional-badge,
+    .tracking-label,
+    .detail-label {
+      font-size: 0.75rem !important;
+    }
+
+    .symptom-tag {
+      font-size: 0.75rem !important;
+    }
+
+    .add-symptom-btn {
+      font-size: 0.75rem !important;
+    }
+
+    /* =====================================================
+       MOBILE LAYOUT — force 2-column grids to stay 2-col
+       on small screens for: gender+dob, discomfort+firstNotice
+       ===================================================== */
     @media (max-width: 480px) {
+      /* Default: stack to 1 column */
       .grid-cols-2 {
-        grid-template-columns: 1fr !important;
-        gap: 1rem;
+        grid-template-columns: 1fr 1fr; /* keep 2 col by default on mobile */
+        gap: 0.625rem;
       }
-      
-      /* Keep discomfort level and first noticed on same line */
-      #discomfortLevel,
-      #firstNotice {
+
+      /* Full-width overrides for items that SHOULD stack */
+      .col-span-2 {
+        grid-column: span 2 / span 2;
+      }
+
+      /* First/Last name row — keep as 2 cols (default above handles it) */
+
+      /* Email, phone — already col-span-2, stays full width */
+
+      /* Gender + DOB — stays 2 cols (default above) */
+
+      /* Discomfort + First Notice — stays 2 cols (default above) */
+
+      /* Contact medium — col-span-2, full width */
+
+      /* Shrink label text slightly on very small screens */
+      label, .text-sm {
+        font-size: 0.7rem !important;
+      }
+
+      /* Ensure select/input height is comfortable on mobile */
+      .h-12 {
+        height: 2.75rem;
+      }
+
+      /* Symptom input wrapper adjustment */
+      .symptom-input-wrapper {
+        flex-wrap: wrap;
+      }
+      .symptom-input-wrapper input {
         width: 100%;
       }
-      
-      /* Keep gender and dob on same line */
-      #gender,
-      #dob {
+      .add-symptom-btn {
         width: 100%;
-      }
-      
-      /* Override for the specific rows that should stay as 2 columns on mobile */
-      .grid-cols-2:has(#discomfortLevel),
-      .grid-cols-2:has(#firstNotice),
-      .grid-cols-2:has(#gender),
-      .grid-cols-2:has(#dob) {
-        display: grid !important;
-        grid-template-columns: 1fr 1fr !important;
-      }
-      
-      /* Target the discomfort/first noticed row */
-      .grid-cols-2:has(#discomfortLevel):has(#firstNotice) {
-        display: grid !important;
-        grid-template-columns: 1fr 1fr !important;
-      }
-      
-      /* Target the gender/dob row */
-      .grid-cols-2:has(#gender):has(#dob) {
-        display: grid !important;
-        grid-template-columns: 1fr 1fr !important;
+        text-align: center;
       }
     }
 
@@ -425,31 +470,6 @@
     .new-consultation-btn:hover {
       background: #e5e5e5;
     }
-
-    /* Mobile input font size fix - prevents zoom on focus */
-    input, select, textarea {
-      font-size: 16px !important; /* Fixed 16px to prevent zoom on mobile */
-    }
-    
-    /* Adjust placeholder size to match */
-    input::placeholder, select::placeholder, textarea::placeholder {
-      font-size: 16px !important;
-    }
-    
-    /* Keep smaller text for specific elements where needed */
-    .text-xs, .text-sm, .step-label, .optional-badge, .tracking-label, .detail-label {
-      font-size: 0.75rem !important;
-    }
-    
-    /* Override for symptom tags */
-    .symptom-tag {
-      font-size: 0.75rem !important;
-    }
-    
-    /* Override for add symptom button */
-    .add-symptom-btn {
-      font-size: 0.75rem !important;
-    }
   </style>
   <title>Consult a Doctor · PureLife Health</title>
 </head>
@@ -506,40 +526,39 @@
                 <button id="newConsultationBtn" class="new-consultation-btn">Schedule New Consultation</button>
               </div>
 
-              <!-- Form (hidden by default, shown when not on success page) -->
+              <!-- Form -->
               <div id="formContainer">
                 <form id="consultationForm" class="flex flex-col mt-4">
                   <!-- Step 1: Personal Information -->
                   <div id="step1" class="step-content">
-                    <!-- Patient details section with grid -->
                     <div class="grid grid-cols-2 gap-4 form-group">
                       <!-- first name -->
                       <div>
                         <label class="text-sm leading-none font-medium" for="firstName">First name <sup class="text-destructive">*</sup></label>
                         <input type="text" id="firstName" name="firstName" placeholder="e.g., John" required
                                class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 shadow-sm mt-1"
-                               style="outline-color: #d0404c;">
+                               style="outline-color: #d0404c;" autocomplete="given-name">
                       </div>
                       <!-- last name -->
                       <div>
                         <label class="text-sm leading-none font-medium" for="lastName">Last name <sup class="text-destructive">*</sup></label>
                         <input type="text" id="lastName" name="lastName" placeholder="e.g., Doe" required
                                class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 shadow-sm mt-1"
-                               style="outline-color: #d0404c;">
+                               style="outline-color: #d0404c;" autocomplete="family-name">
                       </div>
                       <!-- email (full width) -->
                       <div class="col-span-2">
                         <label class="text-sm leading-none font-medium" for="email">Email <sup class="text-destructive">*</sup></label>
                         <input type="email" id="email" name="email" placeholder="you@example.com" required
                                class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 shadow-sm mt-1"
-                               style="outline-color: #d0404c;">
+                               style="outline-color: #d0404c;" autocomplete="email">
                       </div>
                       <!-- phone (full width) -->
                       <div class="col-span-2">
                         <label class="text-sm leading-none font-medium" for="phoneNumber">Phone number <sup class="text-destructive">*</sup></label>
                         <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="+234 800 000 0000" required
                                class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 shadow-sm mt-1"
-                               style="outline-color: #d0404c;">
+                               style="outline-color: #d0404c;" autocomplete="tel">
                       </div>
                       <!-- gender -->
                       <div>
@@ -547,10 +566,9 @@
                         <select id="gender" name="gender" required
                                 class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 shadow-sm mt-1"
                                 style="outline-color: #d0404c;">
-                          <option value="" disabled selected>Select gender</option>
+                          <option value="" disabled selected>Select</option>
                           <option value="Male">Male</option>
                           <option value="Female">Female</option>
-                          <option value="Other">Other</option>
                         </select>
                       </div>
                       <!-- dob -->
@@ -558,7 +576,7 @@
                         <label class="text-sm leading-none font-medium" for="dob">Date of birth <sup class="text-destructive">*</sup></label>
                         <input type="date" id="dob" name="dob" required
                                class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 shadow-sm mt-1"
-                               style="outline-color: #d0404c;">
+                               style="outline-color: #d0404c;" autocomplete="bday">
                       </div>
                     </div>
                   </div>
@@ -568,7 +586,7 @@
                     <!-- doctor id (hidden) -->
                     <input type="hidden" name="doctor" value="62fb71cc87b0180013f54f15">
 
-                    <!-- SYMPTOMS - multiple input -->
+                    <!-- SYMPTOMS -->
                     <div class="form-group">
                       <label class="text-sm leading-none font-medium">Symptoms <sup class="text-destructive">*</sup></label>
                       <div id="symptoms-container" class="mt-2">
@@ -584,23 +602,21 @@
                       <input type="hidden" name="symptoms" id="symptomsData" value='[]'>
                     </div>
 
-                    <!-- Discomfort level (1-10) and First noticed side by side -->
+                    <!-- Discomfort level + First noticed — 2 columns on ALL screen sizes -->
                     <div class="grid grid-cols-2 gap-4 form-group">
-                      <!-- Discomfort level (1-10) -->
                       <div>
-                        <label class="text-sm leading-none font-medium" for="discomfortLevel">Discomfort level (1-10) <sup class="text-destructive">*</sup></label>
+                        <label class="text-sm leading-none font-medium" for="discomfortLevel">Discomfort (1-10) <sup class="text-destructive">*</sup></label>
                         <input type="number" id="discomfortLevel" name="discomfortLevel" min="1" max="10" placeholder="e.g., 5" required
                                class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 shadow-sm mt-1"
-                               style="outline-color: #d0404c;">
+                               style="outline-color: #d0404c;" inputmode="numeric">
                       </div>
                       
-                      <!-- First noticed (required) -->
                       <div>
                         <label class="text-sm leading-none font-medium" for="firstNotice">First noticed <sup class="text-destructive">*</sup></label>
                         <select id="firstNotice" name="firstNotice" required
                                 class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 shadow-sm mt-1"
                                 style="outline-color: #d0404c;">
-                          <option value="" disabled selected>When did symptoms first appear?</option>
+                          <option value="" disabled selected>When?</option>
                           <option value="today">Today</option>
                           <option value="yesterday">Yesterday</option>
                           <option value="last week">Last week</option>
@@ -610,25 +626,22 @@
                       </div>
                     </div>
 
-                    <!-- ROW: Contact medium (required) -->
-                    <div class="grid grid-cols-2 gap-4 form-group">
-                      <!-- Contact medium (required) - full width -->
-                      <div class="col-span-2">
-                        <label class="text-sm leading-none font-medium" for="contactMedium">
-                          Contact medium <sup class="text-destructive">*</sup>
-                        </label>
-                        <select id="contactMedium" name="contactMedium" required
-                                class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 shadow-sm mt-1"
-                                style="outline-color: #d0404c;">
-                          <option value="" disabled selected>Select preference</option>
-                          <option value="video">Video</option>
-                          <option value="audio">Audio</option>
-                          <option value="chat">Chat</option>
-                        </select>
-                      </div>
+                    <!-- Contact medium (full width) -->
+                    <div class="form-group">
+                      <label class="text-sm leading-none font-medium" for="contactMedium">
+                        Contact medium <sup class="text-destructive">*</sup>
+                      </label>
+                      <select id="contactMedium" name="contactMedium" required
+                              class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 shadow-sm mt-1"
+                              style="outline-color: #d0404c;">
+                        <option value="" disabled selected>Select preference</option>
+                        <option value="video">Video</option>
+                        <option value="audio">Audio</option>
+                        <option value="chat">Chat</option>
+                      </select>
                     </div>
 
-                    <!-- Medical Specialist (required) -->
+                    <!-- Medical Specialist -->
                     <div class="form-group">
                       <label class="text-sm leading-none font-medium" for="medicalSpecialist">Medical specialist <sup class="text-destructive">*</sup></label>
                       <select id="medicalSpecialist" name="medicalSpecialist" required
@@ -659,7 +672,7 @@
                              style="outline-color: #d0404c;">
                     </div>
 
-                    <!-- Description - BIG textarea (optional) -->
+                    <!-- Description (optional) -->
                     <div class="form-group">
                       <label class="text-sm leading-none font-medium" for="description">
                         Description <span class="optional-badge">(optional)</span>
@@ -673,7 +686,6 @@
                     <input type="hidden" name="type" value="scheduled">
                     <input type="hidden" name="providerId" value="69b16fb5a4af2c7a8645968f">
                     <input type="hidden" name="createdThrough" value="api">
-                    <input type="hidden" name="status" value="accepted">
                     <input type="hidden" name="paid" value="true">
                   </div>
 
@@ -704,13 +716,11 @@
       const successPage = document.getElementById('successPage');
       const stepIndicator = document.getElementById('stepIndicator');
 
-      // Success page elements
       const trackingIdEl = document.getElementById('trackingId');
       const consultationDetailsEl = document.getElementById('consultationDetails');
       const joinConsultationBtn = document.getElementById('joinConsultationBtn');
       const newConsultationBtn = document.getElementById('newConsultationBtn');
 
-      // Step navigation elements
       const step1 = document.getElementById('step1');
       const step2 = document.getElementById('step2');
       const step1Indicator = document.getElementById('step1-indicator');
@@ -783,7 +793,6 @@
 
       renderSymptoms();
 
-      // Step navigation functions
       function showStep(step) {
         if (step === 1) {
           step1.classList.remove('hidden');
@@ -806,7 +815,6 @@
         currentStep = step;
       }
 
-      // Validate step 1 fields
       function validateStep1() {
         const firstName = document.getElementById('firstName').value;
         const lastName = document.getElementById('lastName').value;
@@ -822,30 +830,25 @@
         return true;
       }
 
-      // Next button click
       nextBtn.addEventListener('click', () => {
         if (validateStep1()) {
-          statusDiv.innerHTML = ''; // Clear any error messages
+          statusDiv.innerHTML = '';
           showStep(2);
         }
       });
 
-      // Previous button click
       prevBtn.addEventListener('click', () => {
         showStep(1);
       });
 
-      // Show success page with data
       function showSuccessPage(data) {
         currentConsultationData = data;
         formContainer.classList.add('hidden');
         successPage.classList.remove('hidden');
         stepIndicator.classList.add('hidden');
 
-        // Set tracking ID
         trackingIdEl.textContent = data.trackingId || 'N/A';
 
-        // Build consultation details HTML
         const appointmentTime = new Date(data.time).toLocaleString('en-US', {
           dateStyle: 'full',
           timeStyle: 'short'
@@ -875,12 +878,9 @@
         `;
 
         consultationDetailsEl.innerHTML = detailsHTML;
-
-        // Set join consultation link
         joinConsultationBtn.href = data.url || '#';
       }
 
-      // Reset to form
       function resetToForm() {
         formContainer.classList.remove('hidden');
         successPage.classList.add('hidden');
@@ -892,10 +892,8 @@
         currentConsultationData = null;
       }
 
-      // New consultation button click
       newConsultationBtn.addEventListener('click', resetToForm);
 
-      // Production endpoint
       const BASE_URL = 'https://api.heala.io';
       const API_KEY = '8DiI87i08kBC/vtA3~W';
 
@@ -936,10 +934,8 @@
 
         const providerId = document.querySelector('input[name="providerId"]').value; 
         const createdThrough = document.querySelector('input[name="createdThrough"]').value;
-        const status = document.querySelector('input[name="status"]').value;
         const paid = document.querySelector('input[name="paid"]').value === 'true';
 
-        // Validate required fields (description is now optional)
         if (!firstName || !lastName || !email || !phoneNumber || !gender || !dob || !discomfortLevel || !firstNotice || !contactMedium || !medicalSpecialist || !appointmentTimeInput) {
           statusDiv.innerHTML = '<span style="color: #d0404c;">✗ Please fill all required fields.</span>';
           submitBtn.disabled = false;
@@ -962,13 +958,11 @@
           return;
         }
 
-        // Concatenate medical specialist with description
         let combinedDescription = `Medical specialist requested: ${medicalSpecialist}`;
         if (description && description.trim() !== '') {
           combinedDescription += `\n\nPatient description: ${description}`;
         }
 
-        // Build payload
         const payload = {
           patientData: {
             firstName,
@@ -988,7 +982,6 @@
           time: isoTime,
           createdThrough,
           providerId,
-          status,
           paid
         };
 
@@ -1005,7 +998,7 @@
           const data = await response.json();
 
           if (response.ok && data.statusCode === 201) {
-            statusDiv.innerHTML = ''; // Clear status
+            statusDiv.innerHTML = '';
             showSuccessPage(data.data);
           } else {
             console.error('API error', data);
@@ -1035,7 +1028,6 @@
     })();
   </script>
 
-  <!-- Notification region placeholder -->
   <div role="region" aria-label="Notifications" tabindex="-1" style="pointer-events: none;"><ol tabindex="-1" class="fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-0 sm:right-0 sm:top-auto sm:flex-col md:max-w-[420px]"></ol></div>
 </body>
 </html>

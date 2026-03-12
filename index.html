@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Updated favicon & logo per request -->
+  <!-- favicon & logo per previous request -->
   <link rel="icon" href="https://www.purelifehealth.io/favicon.ico">
-  <!-- Logo will be used in image src, not as favicon -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.cdnfonts.com/css/euclid-circular-a?styles=100037,100036,100039,100031" rel="stylesheet">
@@ -20,7 +19,7 @@
     body {
       font-family: 'Euclid Circular A', sans-serif;
       background: #f5f5f5;
-      --primary: #d0404c;         /* primary color used in the sample */
+      --primary: #d0404c;
     }
 
     .flex { display: flex; }
@@ -70,12 +69,11 @@
     .mt-4 { margin-top: 1rem; }
     .text-sm { font-size: 0.875rem; }
     .leading-none { line-height: 1; }
-    .text-destructive { color: #d0404c; } /* destructive = primary */
+    .text-destructive { color: #d0404c; }
     .font-medium { font-weight: 500; }
     .ml-0\.5 { margin-left: 0.125rem; }
     .text-\[\#929292\] { color: #929292; }
     .mt-0 { margin-top: 0; }
-    .flex { display: flex; }
     .gap-2 { gap: 0.5rem; }
     .items-center { align-items: center; }
     .h-12 { height: 3rem; }
@@ -110,7 +108,6 @@
     .grid { display: grid; }
     .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .col-span-2 { grid-column: span 2 / span 2; }
-    /* small spacing */
     .mb-2 { margin-bottom: 0.5rem; }
     .block { display: block; }
 
@@ -121,9 +118,6 @@
       margin: 0;
     }
     input[type=number] { -moz-appearance: textfield; }
-
-    /* exactly match HMO/Access ID line and the "click here" */
-    .description-link { color: #d0404c; cursor: pointer; text-decoration: none; }
   </style>
   <title>Consult a Doctor · PureLife Health</title>
 </head>
@@ -137,7 +131,7 @@
       <div class="rounded-2xl overflow-hidden">
         <div class="max-h-[calc(100vh-80px)] flex flex-col m-2 bg-[#fbfbfb] rounded-2xl p-6 relative">
           
-          <!-- header with UPDATED LOGO (PureLife) -->
+          <!-- header with PureLife logo -->
           <div class="py-4 text-center border-b border-b-[#979797]">
             <img src="https://www.purelifehealth.io/app-logo.png" class="max-h-[64px] max-w-[160px] object-contain mx-auto" width="160" height="45" alt="PureLife Health logo">
           </div>
@@ -147,23 +141,12 @@
             <h1 class="text-center text-[#2c2c2c] text-2xl mt-4">Consult a Doctor</h1>
             <p class="text-[#666] text-xs text-center mt-4 leading-relaxed">Fill the form below and we'll connect you to a doctor</p>
             
-            <!-- main form area (preserves HMO/Access ID block from UI) -->
+            <!-- main form area - HMO block REMOVED as requested -->
             <div class="px-0.5 m-1">
               <form id="consultationForm" class="flex flex-col gap-4 mt-4">
                 
-                <!-- exact HMO/Access ID block from the UI -->
-                <div>
-                  <label class="text-sm leading-none" for="hmoId">HMO/Access ID<sup class="text-destructive text-sm font-medium ml-0.5">*</sup></label>
-                  <p class="text-xs text-[#929292] mt-0">This is the HMO/Access ID given to you by your provider.</p>
-                  <div class="flex gap-2 items-center">
-                    <input class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 text-base lg:text-xs text-muted-foreground shadow-sm transition-colors placeholder:text-muted-foreground placeholder:opacity-50 my-[2px]" 
-                           id="hmoId" name="hmoId" placeholder="Enter your ID" value="HMO12345" style="outline-color: #d0404c;">
-                  </div>
-                  <p class="text-xs text-[#929292] mt-0">Can't remember your access id<span class="description-link"> click here</span></p>
-                </div>
-
-                <!-- Patient details (required by API) -->
-                <div class="grid grid-cols-2 gap-3 mt-2">
+                <!-- Patient details (now the first fields) -->
+                <div class="grid grid-cols-2 gap-3">
                   <!-- first name -->
                   <div>
                     <label class="text-sm leading-none" for="firstName">First name <sup class="text-destructive">*</sup></label>
@@ -211,7 +194,7 @@
                   </div>
                 </div>
 
-                <!-- doctor id (hidden) - unchanged from default -->
+                <!-- doctor id (hidden) -->
                 <input type="hidden" name="doctor" value="62fb71cc87b0180013f54f15">
 
                 <!-- symptoms (simplified: one symptom name) -->
@@ -269,7 +252,7 @@
                   </div>
                 </div>
 
-                <!-- scheduled time (datetime-local then convert to ISO) -->
+                <!-- scheduled time (datetime-local) -->
                 <div>
                   <label class="text-sm leading-none" for="appointmentTime">Appointment time <sup class="text-destructive">*</sup></label>
                   <input type="datetime-local" id="appointmentTime" name="appointmentTime" value="2025-01-28T12:00" required
@@ -285,19 +268,19 @@
                          style="outline-color: #d0404c;">
                 </div>
 
-                <!-- NEW providerId as requested, plus other hidden fields -->
-                <input type="hidden" name="providerId" value="69b16fb5a4af2c7a8645968f">   <!-- UPDATED provider ID -->
+                <!-- hidden fields with updated providerId and api key will be used in JS -->
+                <input type="hidden" name="providerId" value="69b16fb5a4af2c7a8645968f">
                 <input type="hidden" name="createdThrough" value="api">
                 <input type="hidden" name="status" value="accepted">
                 <input type="hidden" name="paid" value="true">
 
-                <!-- Submit button (styled like primary) -->
+                <!-- Submit button -->
                 <button type="submit" id="submitBtn"
                         class="w-full py-3 px-6 bg-[#d0404c] text-white rounded-full font-semibold text-sm hover:bg-[#b83642] transition disabled:opacity-50 disabled:cursor-not-allowed mt-2">
                   Schedule consultation
                 </button>
 
-                <!-- tiny status message -->
+                <!-- status message -->
                 <div id="formStatus" class="text-xs text-center text-[#929292] mt-2"></div>
               </form>
             </div>
@@ -313,25 +296,24 @@
       const submitBtn = document.getElementById('submitBtn');
       const statusDiv = document.getElementById('formStatus');
 
-      // Use staging endpoint (as per original) but with NEW API KEY
+      // Use staging endpoint with the new API key
       const BASE_URL = 'https://staging-v2.heala.io';
-      const API_KEY = '8DiI87i08kBC/vtA3~W';   // <-- UPDATED API KEY
+      const API_KEY = '8DiI87i08kBC/vtA3~W';   // provided key
 
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
         
-        // Disable button and show sending status
         submitBtn.disabled = true;
         submitBtn.textContent = 'Scheduling...';
         statusDiv.textContent = '';
 
-        // Gather form values
+        // Get values from form
         const firstName = document.getElementById('firstName').value;
         const lastName = document.getElementById('lastName').value;
         const email = document.getElementById('email').value;
         const phoneNumber = document.getElementById('phoneNumber').value;
         const gender = document.getElementById('gender').value;
-        const dob = document.getElementById('dob').value; // yyyy-mm-dd
+        const dob = document.getElementById('dob').value;
         const doctor = document.querySelector('input[name="doctor"]').value;
         const symptomName = document.getElementById('symptom').value;
         const discomfortLevel = document.getElementById('discomfortLevel').value;
@@ -341,13 +323,12 @@
         const type = document.getElementById('type').value;
         const appointmentTimeInput = document.getElementById('appointmentTime').value;
         const address = document.getElementById('address').value;
-        // Use updated providerId from hidden input
         const providerId = document.querySelector('input[name="providerId"]').value; 
         const createdThrough = document.querySelector('input[name="createdThrough"]').value;
         const status = document.querySelector('input[name="status"]').value;
-        const paid = document.querySelector('input[name="paid"]').value === 'true'; // boolean
+        const paid = document.querySelector('input[name="paid"]').value === 'true';
 
-        // Convert appointmentTime to ISO string with Z
+        // Convert appointmentTime to ISO string
         let isoTime = '';
         if (appointmentTimeInput) {
           const localDate = new Date(appointmentTimeInput);
@@ -360,7 +341,7 @@
           isoTime = '2025-01-28T12:00:00.000Z';
         }
 
-        // Build the payload exactly matching the specification, with new providerId
+        // Build payload exactly as required, with new providerId
         const payload = {
           patientData: {
             firstName,
@@ -381,7 +362,7 @@
           type,
           time: isoTime,
           createdThrough,
-          providerId,               // <-- now uses 69b16fb5a4af2c7a8645968f
+          providerId,
           status,
           address,
           paid
@@ -392,7 +373,7 @@
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': `Api-Key ${API_KEY}`   // new key in use
+              'Authorization': `Api-Key ${API_KEY}`
             },
             body: JSON.stringify(payload)
           });
@@ -401,7 +382,6 @@
 
           if (response.ok) {
             statusDiv.innerHTML = '<span style="color: #2e7d32;">✓ Consultation scheduled successfully!</span>';
-            // Optional: reset to default demo values (keeping them for clarity)
           } else {
             console.error('API error', data);
             statusDiv.innerHTML = `<span style="color: #d0404c;">✗ Error: ${data.message || 'Check console'}</span>`;
@@ -415,7 +395,7 @@
         }
       });
 
-      // optional: style outline on focus matches primary
+      // Focus outline style (optional)
       const inputs = document.querySelectorAll('input, select, textarea');
       inputs.forEach(input => {
         input.addEventListener('focus', () => {

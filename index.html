@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Updated favicon & logo per request -->
+  <link rel="icon" href="https://www.purelifehealth.io/favicon.ico">
+  <!-- Logo will be used in image src, not as favicon -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.cdnfonts.com/css/euclid-circular-a?styles=100037,100036,100039,100031" rel="stylesheet">
+  <style>
+    /* reset & base – matching the given UI exactly */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Euclid Circular A', sans-serif;
+      background: #f5f5f5;
+      --primary: #d0404c;         /* primary color used in the sample */
+    }
+
+    .flex { display: flex; }
+    .justify-center { justify-content: center; }
+    .items-center { align-items: center; }
+    .min-h-screen { min-height: 100vh; }
+    .px-4 { padding-left: 1rem; padding-right: 1rem; }
+    .max-md\:py-10 { padding-top: 2.5rem; padding-bottom: 2.5rem; }
+    .relative { position: relative; }
+    .max-w-\[482px\] { max-width: 482px; }
+    .w-full { width: 100%; }
+    .overflow-hidden { overflow: hidden; }
+    .absolute { position: absolute; }
+    .-z-10 { z-index: -10; }
+    .top-0 { top: 0; }
+    .bottom-0 { bottom: 0; }
+    .left-0 { left: 0; }
+    .right-0 { right: 0; }
+    .rounded-\[24px\] { border-radius: 24px; }
+    .bg-primary { background-color: var(--primary); }
+    .opacity-20 { opacity: 0.2; }
+    .rounded-2xl { border-radius: 1rem; }
+    .overflow-y-auto { overflow-y: auto; }
+    .flex-col { flex-direction: column; }
+    .m-2 { margin: 0.5rem; }
+    .bg-\[\#fbfbfb\] { background-color: #fbfbfb; }
+    .p-6 { padding: 1.5rem; }
+    .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+    .text-center { text-align: center; }
+    .border-b { border-bottom: 1px solid; }
+    .border-b-\[\#979797\] { border-color: #979797; }
+    .max-h-\[64px\] { max-height: 64px; }
+    .max-w-\[160px\] { max-width: 160px; }
+    .object-contain { object-fit: contain; }
+    .mx-auto { margin-left: auto; margin-right: auto; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .text-\[\#2c2c2c\] { color: #2c2c2c; }
+    .text-2xl { font-size: 1.5rem; }
+    .mt-4 { margin-top: 1rem; }
+    .text-\[\#666\] { color: #666; }
+    .text-xs { font-size: 0.75rem; }
+    .leading-relaxed { line-height: 1.625; }
+    .px-0\.5 { padding-left: 0.125rem; padding-right: 0.125rem; }
+    .m-1 { margin: 0.25rem; }
+    .gap-4 { gap: 1rem; }
+    .mt-4 { margin-top: 1rem; }
+    .text-sm { font-size: 0.875rem; }
+    .leading-none { line-height: 1; }
+    .text-destructive { color: #d0404c; } /* destructive = primary */
+    .font-medium { font-weight: 500; }
+    .ml-0\.5 { margin-left: 0.125rem; }
+    .text-\[\#929292\] { color: #929292; }
+    .mt-0 { margin-top: 0; }
+    .flex { display: flex; }
+    .gap-2 { gap: 0.5rem; }
+    .items-center { align-items: center; }
+    .h-12 { height: 3rem; }
+    .w-full { width: 100%; }
+    .rounded-md { border-radius: 0.375rem; }
+    .border { border: 1px solid #e2e8f0; }
+    .border-input { border-color: #e2e8f0; }
+    .bg-white { background-color: white; }
+    .px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
+    .py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; }
+    .text-base { font-size: 1rem; }
+    .lg\:text-xs { font-size: 0.75rem; }
+    .text-muted-foreground { color: #6b7280; }
+    .shadow-sm { box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); }
+    .transition-colors { transition-property: color, background-color, border-color, text-decoration-color, fill, stroke; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
+    .placeholder\:text-muted-foreground::placeholder { color: #9ca3af; }
+    .placeholder\:opacity-50::placeholder { opacity: 0.5; }
+    .my-\[2px\] { margin-top: 2px; margin-bottom: 2px; }
+    .outline-none { outline: none; }
+    .cursor-pointer { cursor: pointer; }
+    .mt-6 { margin-top: 1.5rem; }
+    .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+    .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+    .bg-\[\#d0404c\] { background-color: #d0404c; }
+    .text-white { color: white; }
+    .rounded-full { border-radius: 9999px; }
+    .font-semibold { font-weight: 600; }
+    .hover\:bg-\[\#b83642\]:hover { background-color: #b83642; }
+    .transition { transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
+    .disabled\:opacity-50:disabled { opacity: 0.5; }
+    .disabled\:cursor-not-allowed:disabled { cursor: not-allowed; }
+    .grid { display: grid; }
+    .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .col-span-2 { grid-column: span 2 / span 2; }
+    /* small spacing */
+    .mb-2 { margin-bottom: 0.5rem; }
+    .block { display: block; }
+
+    /* hide spin for number input */
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type=number] { -moz-appearance: textfield; }
+
+    /* exactly match HMO/Access ID line and the "click here" */
+    .description-link { color: #d0404c; cursor: pointer; text-decoration: none; }
+  </style>
+  <title>Consult a Doctor · PureLife Health</title>
+</head>
+<body style="--primary: #d0404c;">
+  <div class="flex justify-center items-center min-h-screen px-4 max-md:py-10">
+    <div class="relative max-w-[482px] w-full overflow-hidden">
+      <!-- pink background layer -->
+      <div class="absolute -z-10 top-0 bottom-0 left-0 right-0 rounded-[24px] bg-primary opacity-20" style="background-color: #d0404c;"></div>
+      
+      <!-- main card -->
+      <div class="rounded-2xl overflow-hidden">
+        <div class="max-h-[calc(100vh-80px)] flex flex-col m-2 bg-[#fbfbfb] rounded-2xl p-6 relative">
+          
+          <!-- header with UPDATED LOGO (PureLife) -->
+          <div class="py-4 text-center border-b border-b-[#979797]">
+            <img src="https://www.purelifehealth.io/app-logo.png" class="max-h-[64px] max-w-[160px] object-contain mx-auto" width="160" height="45" alt="PureLife Health logo">
+          </div>
+          
+          <!-- scrollable content -->
+          <div class="overflow-y-auto no-scrollbar">
+            <h1 class="text-center text-[#2c2c2c] text-2xl mt-4">Consult a Doctor</h1>
+            <p class="text-[#666] text-xs text-center mt-4 leading-relaxed">Fill the form below and we'll connect you to a doctor</p>
+            
+            <!-- main form area (preserves HMO/Access ID block from UI) -->
+            <div class="px-0.5 m-1">
+              <form id="consultationForm" class="flex flex-col gap-4 mt-4">
+                
+                <!-- exact HMO/Access ID block from the UI -->
+                <div>
+                  <label class="text-sm leading-none" for="hmoId">HMO/Access ID<sup class="text-destructive text-sm font-medium ml-0.5">*</sup></label>
+                  <p class="text-xs text-[#929292] mt-0">This is the HMO/Access ID given to you by your provider.</p>
+                  <div class="flex gap-2 items-center">
+                    <input class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 text-base lg:text-xs text-muted-foreground shadow-sm transition-colors placeholder:text-muted-foreground placeholder:opacity-50 my-[2px]" 
+                           id="hmoId" name="hmoId" placeholder="Enter your ID" value="HMO12345" style="outline-color: #d0404c;">
+                  </div>
+                  <p class="text-xs text-[#929292] mt-0">Can't remember your access id<span class="description-link"> click here</span></p>
+                </div>
+
+                <!-- Patient details (required by API) -->
+                <div class="grid grid-cols-2 gap-3 mt-2">
+                  <!-- first name -->
+                  <div>
+                    <label class="text-sm leading-none" for="firstName">First name <sup class="text-destructive">*</sup></label>
+                    <input type="text" id="firstName" name="firstName" value="Victor" required
+                           class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 text-base lg:text-xs text-muted-foreground shadow-sm my-[2px]"
+                           style="outline-color: #d0404c;">
+                  </div>
+                  <!-- last name -->
+                  <div>
+                    <label class="text-sm leading-none" for="lastName">Last name <sup class="text-destructive">*</sup></label>
+                    <input type="text" id="lastName" name="lastName" value="Ebuka" required
+                           class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 text-base lg:text-xs text-muted-foreground shadow-sm my-[2px]"
+                           style="outline-color: #d0404c;">
+                  </div>
+                  <!-- email (col-span-2) -->
+                  <div class="col-span-2">
+                    <label class="text-sm leading-none" for="email">Email <sup class="text-destructive">*</sup></label>
+                    <input type="email" id="email" name="email" value="victorebukachukwujekwu@gmail.com" required
+                           class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 text-base lg:text-xs text-muted-foreground shadow-sm my-[2px]"
+                           style="outline-color: #d0404c;">
+                  </div>
+                  <!-- phone -->
+                  <div class="col-span-2">
+                    <label class="text-sm leading-none" for="phoneNumber">Phone number <sup class="text-destructive">*</sup></label>
+                    <input type="tel" id="phoneNumber" name="phoneNumber" value="08167945270" required
+                           class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 text-base lg:text-xs text-muted-foreground shadow-sm my-[2px]"
+                           style="outline-color: #d0404c;">
+                  </div>
+                  <!-- gender & dob -->
+                  <div>
+                    <label class="text-sm leading-none" for="gender">Gender <sup class="text-destructive">*</sup></label>
+                    <select id="gender" name="gender" required
+                            class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 text-base lg:text-xs text-muted-foreground shadow-sm my-[2px]"
+                            style="outline-color: #d0404c;">
+                      <option value="Male" selected>Male</option>
+                      <option value="Female">Female</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="text-sm leading-none" for="dob">Date of birth <sup class="text-destructive">*</sup></label>
+                    <input type="date" id="dob" name="dob" value="1972-11-29" required
+                           class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 text-base lg:text-xs text-muted-foreground shadow-sm my-[2px]"
+                           style="outline-color: #d0404c;">
+                  </div>
+                </div>
+
+                <!-- doctor id (hidden) - unchanged from default -->
+                <input type="hidden" name="doctor" value="62fb71cc87b0180013f54f15">
+
+                <!-- symptoms (simplified: one symptom name) -->
+                <div>
+                  <label class="text-sm leading-none" for="symptom">Symptom <sup class="text-destructive">*</sup></label>
+                  <input type="text" id="symptom" name="symptom" value="Cough" required
+                         class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 text-base lg:text-xs text-muted-foreground shadow-sm my-[2px]"
+                         style="outline-color: #d0404c;">
+                </div>
+
+                <!-- discomfort level (1-10) -->
+                <div>
+                  <label class="text-sm leading-none" for="discomfortLevel">Discomfort level (1-10) <sup class="text-destructive">*</sup></label>
+                  <input type="number" id="discomfortLevel" name="discomfortLevel" min="1" max="10" value="1" required
+                         class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 text-base lg:text-xs text-muted-foreground shadow-sm my-[2px]"
+                         style="outline-color: #d0404c;">
+                </div>
+
+                <!-- description -->
+                <div>
+                  <label class="text-sm leading-none" for="description">Description <sup class="text-destructive">*</sup></label>
+                  <textarea id="description" name="description" rows="2" required
+                            class="flex w-full rounded-md border border-input bg-white px-3 py-2 text-base lg:text-xs text-muted-foreground shadow-sm my-[2px]"
+                            style="outline-color: #d0404c;">This is a serious something - Dietetics</textarea>
+                </div>
+
+                <!-- first notice -->
+                <div>
+                  <label class="text-sm leading-none" for="firstNotice">First noticed <sup class="text-destructive">*</sup></label>
+                  <input type="text" id="firstNotice" name="firstNotice" value="last week" required
+                         class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 text-base lg:text-xs text-muted-foreground shadow-sm my-[2px]"
+                         style="outline-color: #d0404c;">
+                </div>
+
+                <!-- contact medium & type (scheduled) -->
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label class="text-sm leading-none" for="contactMedium">Contact medium</label>
+                    <select id="contactMedium" name="contactMedium"
+                            class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 text-base lg:text-xs text-muted-foreground shadow-sm my-[2px]"
+                            style="outline-color: #d0404c;">
+                      <option value="video" selected>Video</option>
+                      <option value="audio">Audio</option>
+                      <option value="chat">Chat</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="text-sm leading-none" for="type">Type</label>
+                    <select id="type" name="type"
+                            class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 text-base lg:text-xs text-muted-foreground shadow-sm my-[2px]"
+                            style="outline-color: #d0404c;">
+                      <option value="scheduled" selected>Scheduled</option>
+                      <option value="urgent">Urgent</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- scheduled time (datetime-local then convert to ISO) -->
+                <div>
+                  <label class="text-sm leading-none" for="appointmentTime">Appointment time <sup class="text-destructive">*</sup></label>
+                  <input type="datetime-local" id="appointmentTime" name="appointmentTime" value="2025-01-28T12:00" required
+                         class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 text-base lg:text-xs text-muted-foreground shadow-sm my-[2px]"
+                         style="outline-color: #d0404c;">
+                </div>
+
+                <!-- address -->
+                <div>
+                  <label class="text-sm leading-none" for="address">Address</label>
+                  <input type="text" id="address" name="address" value="24 Dikko Road, Down South, Enugu, Nigeria"
+                         class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 text-base lg:text-xs text-muted-foreground shadow-sm my-[2px]"
+                         style="outline-color: #d0404c;">
+                </div>
+
+                <!-- NEW providerId as requested, plus other hidden fields -->
+                <input type="hidden" name="providerId" value="69b16fb5a4af2c7a8645968f">   <!-- UPDATED provider ID -->
+                <input type="hidden" name="createdThrough" value="api">
+                <input type="hidden" name="status" value="accepted">
+                <input type="hidden" name="paid" value="true">
+
+                <!-- Submit button (styled like primary) -->
+                <button type="submit" id="submitBtn"
+                        class="w-full py-3 px-6 bg-[#d0404c] text-white rounded-full font-semibold text-sm hover:bg-[#b83642] transition disabled:opacity-50 disabled:cursor-not-allowed mt-2">
+                  Schedule consultation
+                </button>
+
+                <!-- tiny status message -->
+                <div id="formStatus" class="text-xs text-center text-[#929292] mt-2"></div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      const form = document.getElementById('consultationForm');
+      const submitBtn = document.getElementById('submitBtn');
+      const statusDiv = document.getElementById('formStatus');
+
+      // Use staging endpoint (as per original) but with NEW API KEY
+      const BASE_URL = 'https://staging-v2.heala.io';
+      const API_KEY = '8DiI87i08kBC/vtA3~W';   // <-- UPDATED API KEY
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        // Disable button and show sending status
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Scheduling...';
+        statusDiv.textContent = '';
+
+        // Gather form values
+        const firstName = document.getElementById('firstName').value;
+        const lastName = document.getElementById('lastName').value;
+        const email = document.getElementById('email').value;
+        const phoneNumber = document.getElementById('phoneNumber').value;
+        const gender = document.getElementById('gender').value;
+        const dob = document.getElementById('dob').value; // yyyy-mm-dd
+        const doctor = document.querySelector('input[name="doctor"]').value;
+        const symptomName = document.getElementById('symptom').value;
+        const discomfortLevel = document.getElementById('discomfortLevel').value;
+        const description = document.getElementById('description').value;
+        const firstNotice = document.getElementById('firstNotice').value;
+        const contactMedium = document.getElementById('contactMedium').value;
+        const type = document.getElementById('type').value;
+        const appointmentTimeInput = document.getElementById('appointmentTime').value;
+        const address = document.getElementById('address').value;
+        // Use updated providerId from hidden input
+        const providerId = document.querySelector('input[name="providerId"]').value; 
+        const createdThrough = document.querySelector('input[name="createdThrough"]').value;
+        const status = document.querySelector('input[name="status"]').value;
+        const paid = document.querySelector('input[name="paid"]').value === 'true'; // boolean
+
+        // Convert appointmentTime to ISO string with Z
+        let isoTime = '';
+        if (appointmentTimeInput) {
+          const localDate = new Date(appointmentTimeInput);
+          if (!isNaN(localDate.getTime())) {
+            isoTime = localDate.toISOString(); 
+          } else {
+            isoTime = '2025-01-28T12:00:00.000Z';
+          }
+        } else {
+          isoTime = '2025-01-28T12:00:00.000Z';
+        }
+
+        // Build the payload exactly matching the specification, with new providerId
+        const payload = {
+          patientData: {
+            firstName,
+            lastName,
+            email,
+            phoneNumber,
+            gender,
+            dob
+          },
+          doctor,
+          symptoms: [
+            { name: symptomName }
+          ],
+          discomfortLevel: discomfortLevel.toString(),
+          description,
+          firstNotice,
+          contactMedium,
+          type,
+          time: isoTime,
+          createdThrough,
+          providerId,               // <-- now uses 69b16fb5a4af2c7a8645968f
+          status,
+          address,
+          paid
+        };
+
+        try {
+          const response = await fetch(`${BASE_URL}/rest/consultations/external/create`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Api-Key ${API_KEY}`   // new key in use
+            },
+            body: JSON.stringify(payload)
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+            statusDiv.innerHTML = '<span style="color: #2e7d32;">✓ Consultation scheduled successfully!</span>';
+            // Optional: reset to default demo values (keeping them for clarity)
+          } else {
+            console.error('API error', data);
+            statusDiv.innerHTML = `<span style="color: #d0404c;">✗ Error: ${data.message || 'Check console'}</span>`;
+          }
+        } catch (error) {
+          console.error('Network error', error);
+          statusDiv.innerHTML = '<span style="color: #d0404c;">✗ Network error. Is CORS or endpoint reachable?</span>';
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Schedule consultation';
+        }
+      });
+
+      // optional: style outline on focus matches primary
+      const inputs = document.querySelectorAll('input, select, textarea');
+      inputs.forEach(input => {
+        input.addEventListener('focus', () => {
+          input.style.outline = '2px solid #d0404c';
+          input.style.outlineOffset = '0';
+        });
+        input.addEventListener('blur', () => {
+          input.style.outline = '';
+        });
+      });
+
+    })();
+  </script>
+
+  <!-- Notification region placeholder (from original) -->
+  <div role="region" aria-label="Notifications" tabindex="-1" style="pointer-events: none;"><ol tabindex="-1" class="fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-0 sm:right-0 sm:top-auto sm:flex-col md:max-w-[420px]"></ol></div>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- favicon & logo per previous request -->
+  <!-- favicon & logo -->
   <link rel="icon" href="https://www.purelifehealth.io/favicon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,6 +22,7 @@
       --primary: #d0404c;
     }
 
+    /* layout utilities */
     .flex { display: flex; }
     .justify-center { justify-content: center; }
     .items-center { align-items: center; }
@@ -110,6 +111,10 @@
     .col-span-2 { grid-column: span 2 / span 2; }
     .mb-2 { margin-bottom: 0.5rem; }
     .block { display: block; }
+    .mt-1 { margin-top: 0.25rem; }
+    .mt-2 { margin-top: 0.5rem; }
+    .hidden { display: none; }
+    .mb-4 { margin-bottom: 1rem; }
 
     /* hide spin for number input */
     input[type=number]::-webkit-inner-spin-button,
@@ -118,6 +123,169 @@
       margin: 0;
     }
     input[type=number] { -moz-appearance: textfield; }
+
+    /* consistent spacing between form elements */
+    .form-group {
+      margin-bottom: 1.25rem; /* uniform spacing between each input block */
+    }
+
+    /* symptom add button */
+    .add-symptom-btn {
+      background-color: #f0f0f0;
+      border: 1px dashed #d0404c;
+      color: #d0404c;
+      border-radius: 9999px;
+      padding: 0.5rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      width: fit-content;
+      white-space: nowrap;
+    }
+    .add-symptom-btn:hover {
+      background-color: #ffe5e7;
+    }
+    .symptom-tag {
+      display: inline-flex;
+      align-items: center;
+      background-color: #f0f0f0;
+      border-radius: 9999px;
+      padding: 0.25rem 0.75rem;
+      margin-right: 0.5rem;
+      margin-bottom: 0.5rem;
+      font-size: 0.75rem;
+    }
+    .symptom-tag button {
+      background: none;
+      border: none;
+      margin-left: 0.5rem;
+      color: #666;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 0.875rem;
+    }
+    .symptom-tag button:hover { color: #d0404c; }
+    .symptom-input-wrapper {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      margin-top: 0.5rem;
+    }
+    
+    /* 70% width for symptom input */
+    .symptom-input-wrapper input {
+      width: 70%;
+    }
+    
+    /* big textarea with increased top padding */
+    textarea#description {
+      min-height: 120px;
+      resize: vertical;
+      padding-top: 0.75rem !important;
+      padding-bottom: 0.75rem;
+    }
+    
+    /* optional badge */
+    .optional-badge {
+      color: #929292;
+      font-weight: normal;
+      font-size: 0.7rem;
+      margin-left: 0.25rem;
+    }
+
+    /* fix grid spacing - ensure columns have proper gap */
+    .grid-cols-2 {
+      gap: 1rem;
+    }
+
+    /* Step indicators */
+    .step-indicator {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+    .step-indicator::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: #e0e0e0;
+      transform: translateY(-50%);
+      z-index: 1;
+    }
+    .step {
+      position: relative;
+      z-index: 2;
+      background: #fbfbfb;
+      padding: 0 0.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .step-number {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #e0e0e0;
+      color: #666;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+    .step.active .step-number {
+      background: #d0404c;
+      color: white;
+    }
+    .step.completed .step-number {
+      background: #2e7d32;
+      color: white;
+    }
+    .step-label {
+      font-size: 0.75rem;
+      color: #666;
+    }
+    .step.active .step-label {
+      color: #d0404c;
+      font-weight: 500;
+    }
+
+    /* Navigation buttons */
+    .nav-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .nav-btn {
+      flex: 1;
+      padding: 0.75rem;
+      border-radius: 9999px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+    .nav-btn.prev {
+      background: #f0f0f0;
+      color: #666;
+      border: 1px solid #ddd;
+    }
+    .nav-btn.prev:hover {
+      background: #e5e5e5;
+    }
+    .nav-btn.next {
+      background: #d0404c;
+      color: white;
+      border: none;
+    }
+    .nav-btn.next:hover {
+      background: #b83642;
+    }
   </style>
   <title>Consult a Doctor · PureLife Health</title>
 </head>
@@ -141,147 +309,198 @@
             <h1 class="text-center text-[#2c2c2c] text-2xl mt-4">Consult a Doctor</h1>
             <p class="text-[#666] text-xs text-center mt-4 leading-relaxed">Fill the form below and we'll connect you to a doctor</p>
             
-            <!-- main form area - HMO block REMOVED as requested -->
+            <!-- Step Indicator -->
+            <div class="step-indicator mt-4">
+              <div class="step active" id="step1-indicator">
+                <div class="step-number">1</div>
+                <span class="step-label">Personal Info</span>
+              </div>
+              <div class="step" id="step2-indicator">
+                <div class="step-number">2</div>
+                <span class="step-label">Medical Details</span>
+              </div>
+            </div>
+            
+            <!-- main form area -->
             <div class="px-0.5 m-1">
-              <form id="consultationForm" class="flex flex-col gap-4 mt-4">
-                
-                <!-- Patient details (now the first fields) -->
-                <div class="grid grid-cols-2 gap-3">
-                  <!-- first name -->
-                  <div>
-                    <label class="text-sm leading-none" for="firstName">First name <sup class="text-destructive">*</sup></label>
-                    <input type="text" id="firstName" name="firstName" value="Victor" required
-                           class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 text-base lg:text-xs text-muted-foreground shadow-sm my-[2px]"
-                           style="outline-color: #d0404c;">
+              <form id="consultationForm" class="flex flex-col mt-4">
+                <!-- Step 1: Personal Information -->
+                <div id="step1" class="step-content">
+                  <!-- Patient details section with grid -->
+                  <div class="grid grid-cols-2 gap-4 form-group">
+                    <!-- first name -->
+                    <div>
+                      <label class="text-sm leading-none font-medium" for="firstName">First name <sup class="text-destructive">*</sup></label>
+                      <input type="text" id="firstName" name="firstName" placeholder="e.g., John" required
+                             class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 text-base lg:text-xs shadow-sm mt-1"
+                             style="outline-color: #d0404c;">
+                    </div>
+                    <!-- last name -->
+                    <div>
+                      <label class="text-sm leading-none font-medium" for="lastName">Last name <sup class="text-destructive">*</sup></label>
+                      <input type="text" id="lastName" name="lastName" placeholder="e.g., Doe" required
+                             class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 text-base lg:text-xs shadow-sm mt-1"
+                             style="outline-color: #d0404c;">
+                    </div>
+                    <!-- email (full width) -->
+                    <div class="col-span-2">
+                      <label class="text-sm leading-none font-medium" for="email">Email <sup class="text-destructive">*</sup></label>
+                      <input type="email" id="email" name="email" placeholder="you@example.com" required
+                             class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 text-base lg:text-xs shadow-sm mt-1"
+                             style="outline-color: #d0404c;">
+                    </div>
+                    <!-- phone (full width) -->
+                    <div class="col-span-2">
+                      <label class="text-sm leading-none font-medium" for="phoneNumber">Phone number <sup class="text-destructive">*</sup></label>
+                      <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="+234 800 000 0000" required
+                             class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 text-base lg:text-xs shadow-sm mt-1"
+                             style="outline-color: #d0404c;">
+                    </div>
+                    <!-- gender -->
+                    <div>
+                      <label class="text-sm leading-none font-medium" for="gender">Gender <sup class="text-destructive">*</sup></label>
+                      <select id="gender" name="gender" required
+                              class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 text-base lg:text-xs shadow-sm mt-1"
+                              style="outline-color: #d0404c;">
+                        <option value="" disabled selected>Select gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                      </select>
+                    </div>
+                    <!-- dob -->
+                    <div>
+                      <label class="text-sm leading-none font-medium" for="dob">Date of birth <sup class="text-destructive">*</sup></label>
+                      <input type="date" id="dob" name="dob" required
+                             class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 text-base lg:text-xs shadow-sm mt-1"
+                             style="outline-color: #d0404c;">
+                    </div>
                   </div>
-                  <!-- last name -->
-                  <div>
-                    <label class="text-sm leading-none" for="lastName">Last name <sup class="text-destructive">*</sup></label>
-                    <input type="text" id="lastName" name="lastName" value="Ebuka" required
-                           class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 text-base lg:text-xs text-muted-foreground shadow-sm my-[2px]"
-                           style="outline-color: #d0404c;">
+                </div>
+
+                <!-- Step 2: Medical Details -->
+                <div id="step2" class="step-content hidden">
+                  <!-- doctor id (hidden) -->
+                  <input type="hidden" name="doctor" value="62fb71cc87b0180013f54f15">
+
+                  <!-- SYMPTOMS - multiple input -->
+                  <div class="form-group">
+                    <label class="text-sm leading-none font-medium">Symptoms <sup class="text-destructive">*</sup></label>
+                    <div id="symptoms-container" class="mt-2">
+                      <div id="symptom-tags" class="flex flex-wrap min-h-[32px]"></div>
+                      
+                      <div class="symptom-input-wrapper">
+                        <input type="text" id="symptomInput" placeholder="e.g., Cough, Fever" 
+                               class="flex h-12 rounded-md border border-input bg-white px-3 py-1 text-base lg:text-xs shadow-sm"
+                               style="outline-color: #d0404c; width: 70%;">
+                        <button type="button" id="addSymptomBtn" class="add-symptom-btn">+ Add symptom</button>
+                      </div>
+                    </div>
+                    <input type="hidden" name="symptoms" id="symptomsData" value='[]'>
                   </div>
-                  <!-- email (col-span-2) -->
-                  <div class="col-span-2">
-                    <label class="text-sm leading-none" for="email">Email <sup class="text-destructive">*</sup></label>
-                    <input type="email" id="email" name="email" value="victorebukachukwujekwu@gmail.com" required
-                           class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 text-base lg:text-xs text-muted-foreground shadow-sm my-[2px]"
-                           style="outline-color: #d0404c;">
+
+                  <!-- Discomfort level (1-10) and First noticed side by side -->
+                  <div class="grid grid-cols-2 gap-4 form-group">
+                    <!-- Discomfort level (1-10) -->
+                    <div>
+                      <label class="text-sm leading-none font-medium" for="discomfortLevel">Discomfort level (1-10) <sup class="text-destructive">*</sup></label>
+                      <input type="number" id="discomfortLevel" name="discomfortLevel" min="1" max="10" placeholder="e.g., 5" required
+                             class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 text-base lg:text-xs shadow-sm mt-1"
+                             style="outline-color: #d0404c;">
+                    </div>
+                    
+                    <!-- First noticed (required) -->
+                    <div>
+                      <label class="text-sm leading-none font-medium" for="firstNotice">First noticed <sup class="text-destructive">*</sup></label>
+                      <select id="firstNotice" name="firstNotice" required
+                              class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 text-base lg:text-xs shadow-sm mt-1"
+                              style="outline-color: #d0404c;">
+                        <option value="" disabled selected>When did symptoms first appear?</option>
+                        <option value="today">Today</option>
+                        <option value="yesterday">Yesterday</option>
+                        <option value="last week">Last week</option>
+                        <option value="two weeks ago">Two weeks ago</option>
+                        <option value="more than a month">More than a month</option>
+                      </select>
+                    </div>
                   </div>
-                  <!-- phone -->
-                  <div class="col-span-2">
-                    <label class="text-sm leading-none" for="phoneNumber">Phone number <sup class="text-destructive">*</sup></label>
-                    <input type="tel" id="phoneNumber" name="phoneNumber" value="08167945270" required
-                           class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 text-base lg:text-xs text-muted-foreground shadow-sm my-[2px]"
-                           style="outline-color: #d0404c;">
+
+                  <!-- ROW: Contact medium (required) -->
+                  <div class="grid grid-cols-2 gap-4 form-group">
+                    <!-- Contact medium (required) - full width -->
+                    <div class="col-span-2">
+                      <label class="text-sm leading-none font-medium" for="contactMedium">
+                        Contact medium <sup class="text-destructive">*</sup>
+                      </label>
+                      <select id="contactMedium" name="contactMedium" required
+                              class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 text-base lg:text-xs shadow-sm mt-1"
+                              style="outline-color: #d0404c;">
+                        <option value="" disabled selected>Select preference</option>
+                        <option value="video">Video</option>
+                        <option value="audio">Audio</option>
+                        <option value="chat">Chat</option>
+                      </select>
+                    </div>
                   </div>
-                  <!-- gender & dob -->
-                  <div>
-                    <label class="text-sm leading-none" for="gender">Gender <sup class="text-destructive">*</sup></label>
-                    <select id="gender" name="gender" required
-                            class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 text-base lg:text-xs text-muted-foreground shadow-sm my-[2px]"
+
+                  <!-- Medical Specialist (required) -->
+                  <div class="form-group">
+                    <label class="text-sm leading-none font-medium" for="medicalSpecialist">Medical specialist <sup class="text-destructive">*</sup></label>
+                    <select id="medicalSpecialist" name="medicalSpecialist" required
+                            class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 text-base lg:text-xs shadow-sm mt-1"
                             style="outline-color: #d0404c;">
-                      <option value="Male" selected>Male</option>
-                      <option value="Female">Female</option>
-                      <option value="Other">Other</option>
+                      <option value="" disabled selected>Select specialist type</option>
+                      <option value="Cardiologist">Cardiologist (Heart Specialist)</option>
+                      <option value="Dermatologist">Dermatologist (Skin Specialist)</option>
+                      <option value="Endocrinologist">Endocrinologist (Hormone Specialist)</option>
+                      <option value="Gastroenterologist">Gastroenterologist (Digestive Specialist)</option>
+                      <option value="General Practitioner">General Practitioner</option>
+                      <option value="Gynecologist">Gynecologist</option>
+                      <option value="Neurologist">Neurologist (Brain & Nerve Specialist)</option>
+                      <option value="Ophthalmologist">Ophthalmologist (Eye Specialist)</option>
+                      <option value="Orthopedist">Orthopedist (Bone & Joint Specialist)</option>
+                      <option value="Pediatrician">Pediatrician (Children's Specialist)</option>
+                      <option value="Psychiatrist">Psychiatrist (Mental Health Specialist)</option>
+                      <option value="Urologist">Urologist</option>
+                      <option value="Other">Other (please specify in description)</option>
                     </select>
                   </div>
-                  <div>
-                    <label class="text-sm leading-none" for="dob">Date of birth <sup class="text-destructive">*</sup></label>
-                    <input type="date" id="dob" name="dob" value="1972-11-29" required
-                           class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 text-base lg:text-xs text-muted-foreground shadow-sm my-[2px]"
+
+                  <!-- Appointment time -->
+                  <div class="form-group">
+                    <label class="text-sm leading-none font-medium" for="appointmentTime">Appointment time <sup class="text-destructive">*</sup></label>
+                    <input type="datetime-local" id="appointmentTime" name="appointmentTime" required
+                           class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 text-base lg:text-xs shadow-sm mt-1"
                            style="outline-color: #d0404c;">
                   </div>
-                </div>
 
-                <!-- doctor id (hidden) -->
-                <input type="hidden" name="doctor" value="62fb71cc87b0180013f54f15">
-
-                <!-- symptoms (simplified: one symptom name) -->
-                <div>
-                  <label class="text-sm leading-none" for="symptom">Symptom <sup class="text-destructive">*</sup></label>
-                  <input type="text" id="symptom" name="symptom" value="Cough" required
-                         class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 text-base lg:text-xs text-muted-foreground shadow-sm my-[2px]"
-                         style="outline-color: #d0404c;">
-                </div>
-
-                <!-- discomfort level (1-10) -->
-                <div>
-                  <label class="text-sm leading-none" for="discomfortLevel">Discomfort level (1-10) <sup class="text-destructive">*</sup></label>
-                  <input type="number" id="discomfortLevel" name="discomfortLevel" min="1" max="10" value="1" required
-                         class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 text-base lg:text-xs text-muted-foreground shadow-sm my-[2px]"
-                         style="outline-color: #d0404c;">
-                </div>
-
-                <!-- description -->
-                <div>
-                  <label class="text-sm leading-none" for="description">Description <sup class="text-destructive">*</sup></label>
-                  <textarea id="description" name="description" rows="2" required
-                            class="flex w-full rounded-md border border-input bg-white px-3 py-2 text-base lg:text-xs text-muted-foreground shadow-sm my-[2px]"
-                            style="outline-color: #d0404c;">This is a serious something - Dietetics</textarea>
-                </div>
-
-                <!-- first notice -->
-                <div>
-                  <label class="text-sm leading-none" for="firstNotice">First noticed <sup class="text-destructive">*</sup></label>
-                  <input type="text" id="firstNotice" name="firstNotice" value="last week" required
-                         class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 text-base lg:text-xs text-muted-foreground shadow-sm my-[2px]"
-                         style="outline-color: #d0404c;">
-                </div>
-
-                <!-- contact medium & type (scheduled) -->
-                <div class="grid grid-cols-2 gap-3">
-                  <div>
-                    <label class="text-sm leading-none" for="contactMedium">Contact medium</label>
-                    <select id="contactMedium" name="contactMedium"
-                            class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 text-base lg:text-xs text-muted-foreground shadow-sm my-[2px]"
-                            style="outline-color: #d0404c;">
-                      <option value="video" selected>Video</option>
-                      <option value="audio">Audio</option>
-                      <option value="chat">Chat</option>
-                    </select>
+                  <!-- Description - BIG textarea (optional) -->
+                  <div class="form-group">
+                    <label class="text-sm leading-none font-medium" for="description">
+                      Description <span class="optional-badge">(optional)</span>
+                    </label>
+                    <textarea id="description" name="description" placeholder="Please describe your symptoms in detail, including any relevant medical history..."
+                              class="flex w-full rounded-md border border-input bg-white px-3 text-base lg:text-xs shadow-sm mt-1"
+                              style="outline-color: #d0404c; min-height: 120px; padding-top: 0.75rem; padding-bottom: 0.75rem;"></textarea>
                   </div>
-                  <div>
-                    <label class="text-sm leading-none" for="type">Type</label>
-                    <select id="type" name="type"
-                            class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 text-base lg:text-xs text-muted-foreground shadow-sm my-[2px]"
-                            style="outline-color: #d0404c;">
-                      <option value="scheduled" selected>Scheduled</option>
-                      <option value="urgent">Urgent</option>
-                    </select>
-                  </div>
+
+                  <!-- hidden fields -->
+                  <input type="hidden" name="type" value="scheduled">
+                  <input type="hidden" name="providerId" value="69b16fb5a4af2c7a8645968f">
+                  <input type="hidden" name="createdThrough" value="api">
+                  <input type="hidden" name="status" value="accepted">
+                  <input type="hidden" name="paid" value="true">
                 </div>
 
-                <!-- scheduled time (datetime-local) -->
-                <div>
-                  <label class="text-sm leading-none" for="appointmentTime">Appointment time <sup class="text-destructive">*</sup></label>
-                  <input type="datetime-local" id="appointmentTime" name="appointmentTime" value="2025-01-28T12:00" required
-                         class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 text-base lg:text-xs text-muted-foreground shadow-sm my-[2px]"
-                         style="outline-color: #d0404c;">
+                <!-- Navigation buttons -->
+                <div class="nav-buttons">
+                  <button type="button" id="prevBtn" class="nav-btn prev hidden">Previous</button>
+                  <button type="button" id="nextBtn" class="nav-btn next">Next</button>
+                  <button type="submit" id="submitBtn" class="w-full py-3 px-6 bg-[#d0404c] text-white rounded-full font-semibold text-sm hover:bg-[#b83642] transition disabled:opacity-50 disabled:cursor-not-allowed hidden">Schedule consultation</button>
                 </div>
-
-                <!-- address -->
-                <div>
-                  <label class="text-sm leading-none" for="address">Address</label>
-                  <input type="text" id="address" name="address" value="24 Dikko Road, Down South, Enugu, Nigeria"
-                         class="flex h-12 w-full rounded-md border border-input bg-white px-3 py-1 text-base lg:text-xs text-muted-foreground shadow-sm my-[2px]"
-                         style="outline-color: #d0404c;">
-                </div>
-
-                <!-- hidden fields with updated providerId and api key will be used in JS -->
-                <input type="hidden" name="providerId" value="69b16fb5a4af2c7a8645968f">
-                <input type="hidden" name="createdThrough" value="api">
-                <input type="hidden" name="status" value="accepted">
-                <input type="hidden" name="paid" value="true">
-
-                <!-- Submit button -->
-                <button type="submit" id="submitBtn"
-                        class="w-full py-3 px-6 bg-[#d0404c] text-white rounded-full font-semibold text-sm hover:bg-[#b83642] transition disabled:opacity-50 disabled:cursor-not-allowed mt-2">
-                  Schedule consultation
-                </button>
 
                 <!-- status message -->
-                <div id="formStatus" class="text-xs text-center text-[#929292] mt-2"></div>
+                <div id="formStatus" class="text-xs text-center text-[#929292] mt-4"></div>
               </form>
             </div>
           </div>
@@ -296,18 +515,146 @@
       const submitBtn = document.getElementById('submitBtn');
       const statusDiv = document.getElementById('formStatus');
 
-      // Use staging endpoint with the new API key
-      const BASE_URL = 'https://staging-v2.heala.io';
-      const API_KEY = '8DiI87i08kBC/vtA3~W';   // provided key
+      // Step navigation elements
+      const step1 = document.getElementById('step1');
+      const step2 = document.getElementById('step2');
+      const step1Indicator = document.getElementById('step1-indicator');
+      const step2Indicator = document.getElementById('step2-indicator');
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+
+      let currentStep = 1;
+
+      // Symptom multi-input logic
+      const symptomInput = document.getElementById('symptomInput');
+      const addBtn = document.getElementById('addSymptomBtn');
+      const symptomTags = document.getElementById('symptom-tags');
+      const symptomsHidden = document.getElementById('symptomsData');
+
+      let symptoms = []; 
+
+      function renderSymptoms() {
+        symptomTags.innerHTML = '';
+        if (symptoms.length === 0) {
+          const emptyHint = document.createElement('span');
+          emptyHint.className = 'text-xs text-[#929292]';
+          emptyHint.textContent = 'No symptoms added yet.';
+          symptomTags.appendChild(emptyHint);
+        } else {
+          symptoms.forEach((symptom, index) => {
+            const tag = document.createElement('span');
+            tag.className = 'symptom-tag';
+            tag.innerHTML = `${symptom.name} <button type="button" data-index="${index}">✕</button>`;
+            symptomTags.appendChild(tag);
+          });
+
+          document.querySelectorAll('.symptom-tag button').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              const index = e.target.getAttribute('data-index');
+              if (index !== null) {
+                symptoms.splice(index, 1);
+                renderSymptoms();
+                updateHiddenField();
+              }
+              e.stopPropagation();
+            });
+          });
+        }
+        updateHiddenField();
+      }
+
+      function updateHiddenField() {
+        symptomsHidden.value = JSON.stringify(symptoms.map(s => ({ name: s.name })));
+      }
+
+      addBtn.addEventListener('click', () => {
+        const newSymptom = symptomInput.value.trim();
+        if (newSymptom) {
+          symptoms.push({ name: newSymptom });
+          renderSymptoms();
+          symptomInput.value = '';
+        } else {
+          alert('Please enter a symptom');
+        }
+      });
+
+      symptomInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          addBtn.click();
+        }
+      });
+
+      renderSymptoms();
+
+      // Step navigation functions
+      function showStep(step) {
+        if (step === 1) {
+          step1.classList.remove('hidden');
+          step2.classList.add('hidden');
+          step1Indicator.classList.add('active');
+          step2Indicator.classList.remove('active', 'completed');
+          prevBtn.classList.add('hidden');
+          nextBtn.classList.remove('hidden');
+          submitBtn.classList.add('hidden');
+        } else if (step === 2) {
+          step1.classList.add('hidden');
+          step2.classList.remove('hidden');
+          step1Indicator.classList.remove('active');
+          step1Indicator.classList.add('completed');
+          step2Indicator.classList.add('active');
+          prevBtn.classList.remove('hidden');
+          nextBtn.classList.add('hidden');
+          submitBtn.classList.remove('hidden');
+        }
+        currentStep = step;
+      }
+
+      // Validate step 1 fields
+      function validateStep1() {
+        const firstName = document.getElementById('firstName').value;
+        const lastName = document.getElementById('lastName').value;
+        const email = document.getElementById('email').value;
+        const phoneNumber = document.getElementById('phoneNumber').value;
+        const gender = document.getElementById('gender').value;
+        const dob = document.getElementById('dob').value;
+
+        if (!firstName || !lastName || !email || !phoneNumber || !gender || !dob) {
+          statusDiv.innerHTML = '<span style="color: #d0404c;">✗ Please fill all required fields in Step 1.</span>';
+          return false;
+        }
+        return true;
+      }
+
+      // Next button click
+      nextBtn.addEventListener('click', () => {
+        if (validateStep1()) {
+          statusDiv.innerHTML = ''; // Clear any error messages
+          showStep(2);
+        }
+      });
+
+      // Previous button click
+      prevBtn.addEventListener('click', () => {
+        showStep(1);
+      });
+
+      // Production endpoint
+      const BASE_URL = 'https://api.heala.io';
+      const API_KEY = '8DiI87i08kBC/vtA3~W';
 
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
         
+        if (symptoms.length === 0) {
+          statusDiv.innerHTML = '<span style="color: #d0404c;">✗ Please add at least one symptom.</span>';
+          return;
+        }
+
         submitBtn.disabled = true;
         submitBtn.textContent = 'Scheduling...';
         statusDiv.textContent = '';
 
-        // Get values from form
         const firstName = document.getElementById('firstName').value;
         const lastName = document.getElementById('lastName').value;
         const email = document.getElementById('email').value;
@@ -315,33 +662,57 @@
         const gender = document.getElementById('gender').value;
         const dob = document.getElementById('dob').value;
         const doctor = document.querySelector('input[name="doctor"]').value;
-        const symptomName = document.getElementById('symptom').value;
+        
+        let symptomsArray = [];
+        try {
+          symptomsArray = JSON.parse(symptomsHidden.value);
+        } catch (e) {
+          symptomsArray = [];
+        }
+
         const discomfortLevel = document.getElementById('discomfortLevel').value;
         const description = document.getElementById('description').value;
         const firstNotice = document.getElementById('firstNotice').value;
         const contactMedium = document.getElementById('contactMedium').value;
-        const type = document.getElementById('type').value;
+        const medicalSpecialist = document.getElementById('medicalSpecialist').value;
+        const type = document.querySelector('input[name="type"]').value;
         const appointmentTimeInput = document.getElementById('appointmentTime').value;
-        const address = document.getElementById('address').value;
+
         const providerId = document.querySelector('input[name="providerId"]').value; 
         const createdThrough = document.querySelector('input[name="createdThrough"]').value;
         const status = document.querySelector('input[name="status"]').value;
         const paid = document.querySelector('input[name="paid"]').value === 'true';
 
-        // Convert appointmentTime to ISO string
+        // Validate required fields (description is now optional)
+        if (!firstName || !lastName || !email || !phoneNumber || !gender || !dob || !discomfortLevel || !firstNotice || !contactMedium || !medicalSpecialist || !appointmentTimeInput) {
+          statusDiv.innerHTML = '<span style="color: #d0404c;">✗ Please fill all required fields.</span>';
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Schedule consultation';
+          return;
+        }
+
         let isoTime = '';
-        if (appointmentTimeInput) {
+        try {
           const localDate = new Date(appointmentTimeInput);
           if (!isNaN(localDate.getTime())) {
             isoTime = localDate.toISOString(); 
           } else {
-            isoTime = '2025-01-28T12:00:00.000Z';
+            throw new Error('Invalid date');
           }
-        } else {
-          isoTime = '2025-01-28T12:00:00.000Z';
+        } catch (e) {
+          statusDiv.innerHTML = '<span style="color: #d0404c;">✗ Invalid appointment time.</span>';
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Schedule consultation';
+          return;
         }
 
-        // Build payload exactly as required, with new providerId
+        // Concatenate medical specialist with description
+        let combinedDescription = `Medical specialist requested: ${medicalSpecialist}`;
+        if (description && description.trim() !== '') {
+          combinedDescription += `\n\nPatient description: ${description}`;
+        }
+
+        // Build payload
         const payload = {
           patientData: {
             firstName,
@@ -352,19 +723,16 @@
             dob
           },
           doctor,
-          symptoms: [
-            { name: symptomName }
-          ],
+          symptoms: symptomsArray,
           discomfortLevel: discomfortLevel.toString(),
-          description,
+          description: combinedDescription,
           firstNotice,
-          contactMedium,
+          contactMedium: contactMedium,
           type,
           time: isoTime,
           createdThrough,
           providerId,
           status,
-          address,
           paid
         };
 
@@ -382,20 +750,25 @@
 
           if (response.ok) {
             statusDiv.innerHTML = '<span style="color: #2e7d32;">✓ Consultation scheduled successfully!</span>';
+            form.reset();
+            symptoms = [];
+            renderSymptoms();
+            // Reset to step 1 after successful submission
+            showStep(1);
           } else {
             console.error('API error', data);
-            statusDiv.innerHTML = `<span style="color: #d0404c;">✗ Error: ${data.message || 'Check console'}</span>`;
+            statusDiv.innerHTML = `<span style="color: #d0404c;">✗ Error: ${data.message || 'Something went wrong'}</span>`;
           }
         } catch (error) {
           console.error('Network error', error);
-          statusDiv.innerHTML = '<span style="color: #d0404c;">✗ Network error. Is CORS or endpoint reachable?</span>';
+          statusDiv.innerHTML = '<span style="color: #d0404c;">✗ Network error. Please try again.</span>';
         } finally {
           submitBtn.disabled = false;
           submitBtn.textContent = 'Schedule consultation';
         }
       });
 
-      // Focus outline style (optional)
+      // Focus outline style
       const inputs = document.querySelectorAll('input, select, textarea');
       inputs.forEach(input => {
         input.addEventListener('focus', () => {
@@ -410,7 +783,7 @@
     })();
   </script>
 
-  <!-- Notification region placeholder (from original) -->
+  <!-- Notification region placeholder -->
   <div role="region" aria-label="Notifications" tabindex="-1" style="pointer-events: none;"><ol tabindex="-1" class="fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-0 sm:right-0 sm:top-auto sm:flex-col md:max-w-[420px]"></ol></div>
 </body>
 </html>
